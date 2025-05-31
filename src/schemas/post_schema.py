@@ -3,16 +3,20 @@ from datetime import datetime
 
 
 class PostBase(BaseModel):
-    username: str
     body: str
 
 
 class PostCreateDto(PostBase):
+    username: str | None
+
+
+class PostUpdateDto(PostBase):
     pass
 
 
 class PostResponse(PostBase):
     id: int
+    username: str
     archived: bool
     created_at: datetime
     updated_at: datetime
