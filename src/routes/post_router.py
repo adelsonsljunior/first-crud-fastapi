@@ -29,3 +29,9 @@ async def create(post: PostCreateDto, db: Session = Depends(get_db)):
 async def find_by_id(post_id: int, db: Session = Depends(get_db)):
     controller = PostController(db)
     return controller.find_by_id(post_id)
+
+
+@router.get("/username/{posts_username}", response_model=List[PostResponse])
+async def find_all_by_username(posts_username: str, db: Session = Depends(get_db)):
+    controller = PostController(db)
+    return controller.find_all_by_username(posts_username)
