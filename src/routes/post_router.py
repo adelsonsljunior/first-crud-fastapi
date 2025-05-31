@@ -35,3 +35,22 @@ async def find_by_id(post_id: int, db: Session = Depends(get_db)):
 async def find_all_by_username(posts_username: str, db: Session = Depends(get_db)):
     controller = PostController(db)
     return controller.find_all_by_username(posts_username)
+
+
+@router.patch(
+    "/archive/{post_id}",
+    status_code=204,
+    responses={404: {"model": ErrorResponse}, 409: {"model": ErrorResponse}},
+)
+async def archive(post_id: int, db: Session = Depends(get_db)):
+    controller = PostController(db)
+    return controller.archive(post_id)
+
+@router.patch(
+    "/unarchive/{post_id}",
+    status_code=204,
+    responses={404: {"model": ErrorResponse}, 409: {"model": ErrorResponse}},
+)
+async def unarchive(post_id: int, db: Session = Depends(get_db)):
+    controller = PostController(db)
+    return controller.unarchive(post_id)
