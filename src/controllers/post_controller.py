@@ -4,7 +4,7 @@ from fastapi import status, Response
 from fastapi.responses import JSONResponse
 
 from models.post import Post
-from schemas.post_schema import PostCreateDto
+from schemas.post_schema import PostCreateDto, PostUpdateDto
 from schemas.responses import ErrorResponse, IdResponse
 
 
@@ -34,6 +34,22 @@ class PostController:
                 content=ErrorResponse(message="Post não encontrado").model_dump(),
             )
         return post
+
+    def update(self, post_id: int, data: PostUpdateDto):
+        post = self.db.query(Post).filter(Post.id == post_id).first()
+        if not post:
+            return JSONResponse(
+                status_code=status.HTTP_404_NOT_FOUND,
+                content=ErrorResponse(message="Post não encontrado").model_dump(),
+            )
+
+        if data.body:
+            post.body = data.body
+
+        post.updated_at = func.now()
+        self.db.commit()
+
+        return Response(status_code=status.HTTP_204_NO_CONTENT)
 
     def archive(self, post_id):
         post = self.db.query(Post).filter(Post.id == post_id).first()

@@ -5,7 +5,7 @@ from typing import List
 
 from database import get_db
 from controllers.post_controller import PostController
-from schemas.post_schema import PostCreateDto, PostResponse
+from schemas.post_schema import PostCreateDto, PostResponse, PostUpdateDto
 from schemas.responses import IdResponse, ErrorResponse
 
 router = APIRouter(prefix="/posts", tags=["posts"])
@@ -18,9 +18,9 @@ async def find_all(db: Session = Depends(get_db)):
 
 
 @router.post("", response_model=IdResponse, status_code=201)
-async def create(post: PostCreateDto, db: Session = Depends(get_db)):
+async def create(data: PostCreateDto, db: Session = Depends(get_db)):
     controller = PostController(db)
-    return controller.create(post)
+    return controller.create(data)
 
 
 @router.get(
@@ -35,6 +35,12 @@ async def find_by_id(post_id: int, db: Session = Depends(get_db)):
 async def find_all_by_username(posts_username: str, db: Session = Depends(get_db)):
     controller = PostController(db)
     return controller.find_all_by_username(posts_username)
+
+
+@router.patch("/{post_id}")
+async def update(post_id: int, data: PostUpdateDto, db: Session = Depends(get_db)):
+    controller = PostController(db)
+    return controller.update(post_id, data)
 
 
 @router.patch(
