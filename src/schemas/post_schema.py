@@ -16,10 +16,3 @@ class PostResponse(PostBase):
     archived: bool
     created_at: datetime
     updated_at: datetime
-
-    class Config:
-        from_attributes = True
-
-
-class IdResponse(BaseModel):
-    id: int
