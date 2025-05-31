@@ -55,7 +55,6 @@ class PostController:
 
         return Response(status_code=status.HTTP_204_NO_CONTENT)
 
-
     def unarchive(self, post_id):
         post = self.db.query(Post).filter(Post.id == post_id).first()
         if not post:
@@ -72,6 +71,19 @@ class PostController:
 
         post.archived = False
         post.updated_at = func.now()
+        self.db.commit()
+
+        return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+    def delete(self, post_id: int):
+        post = self.db.query(Post).filter(Post.id == post_id).first()
+        if not post:
+            return JSONResponse(
+                status_code=status.HTTP_404_NOT_FOUND,
+                content=ErrorResponse(message="Post não encontrado").model_dump(),
+            )
+
+        self.db.delete(post)
         self.db.commit()
 
         return Response(status_code=status.HTTP_204_NO_CONTENT)

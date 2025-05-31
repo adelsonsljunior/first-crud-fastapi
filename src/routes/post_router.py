@@ -46,6 +46,7 @@ async def archive(post_id: int, db: Session = Depends(get_db)):
     controller = PostController(db)
     return controller.archive(post_id)
 
+
 @router.patch(
     "/unarchive/{post_id}",
     status_code=204,
@@ -54,3 +55,9 @@ async def archive(post_id: int, db: Session = Depends(get_db)):
 async def unarchive(post_id: int, db: Session = Depends(get_db)):
     controller = PostController(db)
     return controller.unarchive(post_id)
+
+
+@router.delete("/{post_id}", status_code=204, responses={404: {"model": ErrorResponse}})
+async def delete(post_id: int, db: Session = Depends(get_db)):
+    controller = PostController(db)
+    return controller.delete(post_id)
