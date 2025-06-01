@@ -23,4 +23,4 @@ jobs:
       - name: Build and Push Docker Image
         run: |
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/first-crud-fastapi:latest .
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/first-crud-fastapi:latest .
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/first-crud-fastapi:latest
