@@ -1,8 +1,6 @@
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 
-from typing import List
-
 from database import get_db
 from controllers.post_controller import PostController
 from schemas.post_schema import PostCreateDto, PostResponseDto, PostUpdateDto
@@ -37,10 +35,17 @@ async def find_by_id(post_id: int, db: Session = Depends(get_db)):
     return controller.find_by_id(post_id)
 
 
-@router.get("/username/{posts_username}", response_model=List[PostResponseDto])
-async def find_all_by_username(posts_username: str, db: Session = Depends(get_db)):
+@router.get(
+    "/username/{posts_username}", response_model=PaginationResponse[PostResponseDto]
+)
+async def find_all_by_username(
+    posts_username: str,
+    page: int = Query(default=1, ge=1),
+    limit: int = Query(default=10, ge=1),
+    db: Session = Depends(get_db),
+):
     controller = PostController(db)
-    return controller.find_all_by_username(posts_username)
+    return controller.find_all_by_username(posts_username, page, limit)
 
 
 @router.patch("/{post_id}")

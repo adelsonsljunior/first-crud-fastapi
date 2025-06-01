@@ -27,10 +27,11 @@ class PostController:
         # Calcula o total de páginas (arredondando para cima)
         total_pages = max((total + limit - 1) // limit, 1)
 
-        # Convertendo a mado Python tudo em uma linha
-        posts_dtos = [post_entity_to_dto(post) for post in posts]
         # Garante que a página atual está dentro dos limites
         current_page = min(max(page, 1), total_pages)
+
+        # Convertendo a mado Python tudo em uma linha
+        posts_dtos = [post_entity_to_dto(post) for post in posts]
 
         return PaginationResponse[PostResponseDto](
             data=posts_dtos,
@@ -40,9 +41,34 @@ class PostController:
             total_pages=total_pages,
         )
 
-    def find_all_by_username(self, posts_username: str):
+    def find_all_by_username(
+        self, posts_username: str, page: int, limit: int
+    ) -> PaginationResponse[PostResponseDto]:
+        offset = (page - 1) * limit
+
         posts_username = "%" + posts_username + "%"
-        return self.db.query(Post).filter(Post.username.like(posts_username)).all()
+        posts = (
+            self.db.query(Post)
+            .filter(Post.username.like(posts_username))
+            .offset(offset)
+            .limit(limit)
+            .all()
+        )
+        total = self.db.query(Post).filter(Post.username.like(posts_username)).count()
+
+        total_pages = max((total + limit - 1) // limit, 1)
+
+        current_page = min(max(page, 1), total_pages)
+
+        posts_dtos = [post_entity_to_dto(post) for post in posts]
+
+        return PaginationResponse[PostResponseDto](
+            data=posts_dtos,
+            items_per_page=limit,
+            total_items=total,
+            current_page=current_page,
+            total_pages=total_pages,
+        )
 
     def create(self, data: PostCreateDto) -> IdResponse:
         post = Post(**data.model_dump())
