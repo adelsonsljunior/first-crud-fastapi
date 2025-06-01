@@ -4,16 +4,41 @@ from fastapi import status, Response
 from fastapi.responses import JSONResponse
 
 from models.post import Post
-from schemas.post_schema import PostCreateDto, PostUpdateDto
-from schemas.responses import ErrorResponse, IdResponse
+from schemas.post_schema import PostCreateDto, PostUpdateDto, PostResponseDto
+from schemas.responses import ErrorResponse, IdResponse, PaginationResponse
+from mappers.post_mapper import post_entity_to_dto
 
 
 class PostController:
     def __init__(self, db: Session):
         self.db = db
 
-    def find_all(self):
-        return self.db.query(Post).all()
+    def find_all(
+        self,
+        page: int,
+        limit: int,
+    ) -> PaginationResponse[PostResponseDto]:
+        # Calcula o offset
+        offset = (page - 1) * limit
+
+        posts = self.db.query(Post).order_by(Post.id).offset(offset).limit(limit).all()
+        total = self.db.query(Post).count()
+
+        # Calcula o total de páginas (arredondando para cima)
+        total_pages = max((total + limit - 1) // limit, 1)
+
+        # Convertendo a mado Python tudo em uma linha
+        posts_dtos = [post_entity_to_dto(post) for post in posts]
+        # Garante que a página atual está dentro dos limites
+        current_page = min(max(page, 1), total_pages)
+
+        return PaginationResponse[PostResponseDto](
+            data=posts_dtos,
+            items_per_page=limit,
+            total_items=total,
+            current_page=current_page,
+            total_pages=total_pages,
+        )
 
     def find_all_by_username(self, posts_username: str):
         posts_username = "%" + posts_username + "%"
@@ -51,7 +76,7 @@ class PostController:
 
         return Response(status_code=status.HTTP_204_NO_CONTENT)
 
-    def archive(self, post_id):
+    def archive(self, post_id: int):
         post = self.db.query(Post).filter(Post.id == post_id).first()
         if not post:
             return JSONResponse(
@@ -71,7 +96,7 @@ class PostController:
 
         return Response(status_code=status.HTTP_204_NO_CONTENT)
 
-    def unarchive(self, post_id):
+    def unarchive(self, post_id: int):
         post = self.db.query(Post).filter(Post.id == post_id).first()
         if not post:
             return JSONResponse(
