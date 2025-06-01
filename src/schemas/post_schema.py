@@ -14,7 +14,7 @@ class PostUpdateDto(PostBase):
     pass
 
 
-class PostResponse(PostBase):
+class PostResponseDto(PostBase):
     id: int
     username: str
     archived: bool
