@@ -1,0 +1,13 @@
+name: first-crud-fastapi
+
+services:
+  api:
+    image: junioradelsonst/first-crud-fastapi:latest
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_URL=${DB_URL}
+    deploy:
+      replicas: 10
+      restart_policy:
+        condition: on-failure
