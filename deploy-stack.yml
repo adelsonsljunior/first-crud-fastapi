@@ -1,4 +1,4 @@
-name: first-crud-fastapi
+version: '3.8'
 
 services:
   api:
