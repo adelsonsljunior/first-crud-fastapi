@@ -8,6 +8,6 @@ services:
     environment:
       - DB_URL=${DB_URL}
     deploy:
-      replicas: 10
+      replicas: 5
       restart_policy:
         condition: on-failure
