@@ -30,7 +30,7 @@ class PostController:
         # Garante que a página atual está dentro dos limites
         current_page = min(max(page, 1), total_pages)
 
-        # Convertendo a mado Python tudo em uma linha
+        # Convertendo a moda Python tudo em uma linha
         posts_dtos = [post_entity_to_dto(post) for post in posts]
 
         return PaginationResponse[PostResponseDto](
