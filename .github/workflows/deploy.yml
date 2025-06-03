@@ -35,6 +35,7 @@ jobs:
           host: ${{ secrets.SWARM_HOST}}
           username: ${{ secrets.SWARM_USER}}
           key: ${{ secrets.SWARM_SSH_PRIVATE_KEY}}
+          port: 22
           script: |
             echo "HELLO ELLIOT"
             sudo su
