@@ -17,7 +17,7 @@ jobs:
 
       - name: Get short commit hash
         id: get_commit_hash
-        run: echo "commit_hash=(git rev-parse --short=7 HEAD)" >> $GITHUB_OUTPUT
+        run: echo "commit_hash=$(git rev-parse --short=7 HEAD)" >> $GITHUB_OUTPUT
   build: 
     name: Build and Push Docker Image 
     runs-on: ubuntu-latest
