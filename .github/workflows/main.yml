@@ -8,7 +8,7 @@ on:
 jobs:
   checkout:
     name: Checkout Code 
-    runs-on: ubuntu-lastest
+    runs-on: ubuntu-latest
     outputs: 
       commit_hash: ${{ steps.get_commit_hash.outputs.commit_hash }}
     steps: 
