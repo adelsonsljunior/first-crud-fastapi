@@ -37,8 +37,7 @@ jobs:
       
       - name: Build and Push Docker Image
         run: |
-          docker build \
-            -t ${{ secrets.DOCKERHUB_USERNAME }}/first-crud-fastapi:${{ env.commit_hash }} \
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/first-crud-fastapi:${{ env.commit_hash }} \
             -t DOCKERHUB_USERNAME }}/first-crud-fastapi:latest .
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/first-crud-fastapi:${{ env.commit_hash }}
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/first-crud-fastapi:latest
