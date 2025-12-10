@@ -11,8 +11,8 @@ COPY pyproject.toml uv.lock ./
 # Instala todas as dependências dentro de um venv gerenciado pelo uv
 RUN uv sync --frozen --no-cache
 
-# Copia o contéudo de src para /app
-COPY src .
+# Copia o contéudo de app para /app
+COPY app app
 
 FROM cgr.dev/chainguard/python:latest
 
@@ -28,4 +28,4 @@ EXPOSE 8000
 
 USER nonroot
 
-ENTRYPOINT ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+ENTRYPOINT ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
