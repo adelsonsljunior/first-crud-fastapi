@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 
-from database import get_db
-from controllers.post_controller import PostController
-from schemas.post_schema import PostCreateDto, PostResponseDto, PostUpdateDto
-from schemas.responses import IdResponse, ErrorResponse, PaginationResponse
+from app.configs.database import get_db
+from app.controllers.post_controller import PostController
+from app.schemas.post_schema import PostCreateDto, PostResponseDto, PostUpdateDto
+from app.schemas.responses import IdResponse, ErrorResponse, PaginationResponse
 
 router = APIRouter(prefix="/posts", tags=["posts"])
 

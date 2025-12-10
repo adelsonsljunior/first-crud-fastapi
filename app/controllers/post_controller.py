@@ -3,10 +3,10 @@ from sqlalchemy import func
 from fastapi import status, Response
 from fastapi.responses import JSONResponse
 
-from models.post import Post
-from schemas.post_schema import PostCreateDto, PostUpdateDto, PostResponseDto
-from schemas.responses import ErrorResponse, IdResponse, PaginationResponse
-from mappers.post_mapper import post_entity_to_dto
+from app.models.post import Post
+from app.schemas.post_schema import PostCreateDto, PostUpdateDto, PostResponseDto
+from app.schemas.responses import ErrorResponse, IdResponse, PaginationResponse
+from app.mappers.post_mapper import post_entity_to_dto
 
 
 class PostController:

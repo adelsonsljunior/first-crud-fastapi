@@ -1,5 +1,5 @@
-from models.post import Post
-from schemas.post_schema import PostResponseDto
+from app.models.post import Post
+from app.schemas.post_schema import PostResponseDto
 
 
 def post_entity_to_dto(entity: Post) -> PostResponseDto:

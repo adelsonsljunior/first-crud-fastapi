@@ -1,13 +1,21 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, APIRouter
 import uvicorn
 
-from database import create_tables
-from routes.post_router import router as post
+from app.configs.database import create_tables
+from app.routes.post_router import router as post
 
 create_tables()
 
-app = FastAPI()
-app.include_router(post)
+app = FastAPI(
+    title="First Crud FastAPI",
+    description="Uma api simples para testar FastAPI",
+    version="0.0.1",
+    docs_url="/api/docs",
+)
+
+api_router = APIRouter(prefix="/api")
+api_router.include_router(post)
+app.include_router(api_router)
 
 
 if __name__ == "__main__":
