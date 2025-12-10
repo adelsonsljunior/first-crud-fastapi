@@ -14,13 +14,13 @@ class HealthController:
             # Testa a conexão executando uma query simples
             self.db.execute(text("SELECT 1"))
 
-            response = HealthResponse(status="ok", message="Postgres databse está on")
+            response = HealthResponse(status="Ok", message="Postgres databse está on")
             return JSONResponse(
                 content=response.model_dump()
             )
 
         except Exception as e:
-            response = HealthResponse(status="failure", message="Postgres databse está off")
+            response = HealthResponse(status="Failure", message="Postgres databse está off")
             return JSONResponse(
                 status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
                 content=response.model_dump()

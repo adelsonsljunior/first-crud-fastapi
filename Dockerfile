@@ -12,7 +12,7 @@ COPY pyproject.toml uv.lock ./
 RUN uv sync --frozen --no-cache
 
 # Copia o contéudo de app para /app
-COPY app .
+COPY app app
 
 FROM cgr.dev/chainguard/python:latest
 
@@ -28,4 +28,4 @@ EXPOSE 8000
 
 USER nonroot
 
-ENTRYPOINT ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+ENTRYPOINT ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
