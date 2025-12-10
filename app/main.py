@@ -3,6 +3,7 @@ import uvicorn
 
 from app.configs.database import create_tables
 from app.routes.post_router import router as post
+from app.routes.health_router import router as health
 
 create_tables()
 
@@ -15,6 +16,7 @@ app = FastAPI(
 
 api_router = APIRouter(prefix="/api")
 api_router.include_router(post)
+api_router.include_router(health)
 app.include_router(api_router)
 
 
