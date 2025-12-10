@@ -1,14 +1,31 @@
-FROM python:3.12-alpine
+FROM cgr.dev/chainguard/python:latest-dev AS builder
 
-# Install uv.
+# Copia o binário do uv
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
-# Copy the application into the container.
-COPY . /app
-
-# Install the application dependencies.
 WORKDIR /app
+
+# Copia arquivos de dependências
+COPY pyproject.toml uv.lock ./
+
+# Instala todas as dependências dentro de um venv gerenciado pelo uv
 RUN uv sync --frozen --no-cache
 
-# Run the application.
-CMD ["/app/.venv/bin/fastapi", "run", "src/main.py", "--port", "8080"]
+# Copia o contéudo de src para /app
+COPY src .
+
+FROM cgr.dev/chainguard/python:latest
+
+WORKDIR /app
+
+# Copia app + venv pronto
+COPY --from=builder /app /app
+
+# Usa o ambiente virtual criado pelo uv
+ENV PATH="/app/.venv/bin:${PATH}"
+
+EXPOSE 8000
+
+USER nonroot
+
+ENTRYPOINT ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
