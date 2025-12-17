@@ -7,8 +7,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8000:8000"
-    environment:
-      - DB_URL=${DB_URL}
+    env_file:
+      - .env
     depends_on:
       database:
         condition: service_healthy
