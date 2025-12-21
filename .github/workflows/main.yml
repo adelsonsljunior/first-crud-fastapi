@@ -15,11 +15,11 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Run Trivy Vulnerability Scanner in FSMode
+      - name: Trivy Scan Dependency
         uses: aquasecurity/trivy-action@0.33.1
         with:
           scan-type: "fs"
-          scan-ref: '.'
+          scan-ref: "."
           ignore-unfixed: true
           exit-code: "1"
           severity: "CRITICAL,HIGH"
@@ -49,7 +49,7 @@ jobs:
         run: |
           docker build -t ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} .
 
-      - name: Run Trivy Vulnerability Scanner
+      - name: Run Trivy Scan Docker Image
         uses: aquasecurity/trivy-action@0.33.1
         with:
           image-ref: "${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}"
